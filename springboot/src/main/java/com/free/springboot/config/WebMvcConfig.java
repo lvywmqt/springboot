@@ -1,6 +1,7 @@
 package com.free.springboot.config;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.ApplicationContext;
@@ -22,7 +23,7 @@ import java.io.File;
  */
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
-
+	
     private ApplicationContext applicationContext;
     
     @Override

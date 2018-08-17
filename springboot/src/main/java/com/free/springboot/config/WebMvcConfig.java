@@ -2,9 +2,11 @@ package com.free.springboot.config;
 
 import org.springframework.beans.BeansException;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
@@ -12,9 +14,13 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
+import javax.servlet.MultipartConfigElement;
+import java.io.File;
+
 /**
  * Created by user on 2018/8/10.
  */
+@Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
@@ -37,7 +43,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setApplicationContext(this.applicationContext);
-
+        templateResolver.setCharacterEncoding("UTF-8");
+        
         return templateResolver;
     }
 
@@ -68,4 +75,15 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
         return viewResolver;
     }
 
+	@Bean
+	public MultipartConfigElement multipartConfigElement() {
+		MultipartConfigFactory factory = new MultipartConfigFactory();
+        String location = System.getProperty("user.dir") + "/data/tmp";
+        File tmpFile = new File(location);
+        if (!tmpFile.exists()) {
+            tmpFile.mkdirs();
+        }
+        factory.setLocation(location);
+        return factory.createMultipartConfig();
+	}
 }

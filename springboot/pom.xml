@@ -208,6 +208,27 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.5.1</version>
 		</dependency>
+			<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>3.8</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -215,6 +236,23 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- spring-boot:run 中文乱码解决 -->
+				<configuration>
+					<fork>true</fork>
+					<!--增加jvm参数 -->
+					<jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>springloaded</artifactId>
+						<version>1.2.5.RELEASE</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

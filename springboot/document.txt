@@ -1,0 +1,86 @@
+
+#查看rpm安装软件
+rpm -qa|grep -i mysql
+解压rpm
+rpm -ivh
+
+#查看一个程序是否运行
+ps -ef|grep java
+
+#查看端口被占用
+netstat -tunlp|grep 端口号
+
+#杀死一个进程
+kill -9 [pid]
+
+#查找一个文件
+find / -name ifcfg-eth0
+
+#创建一个目录
+mkdir nginx
+
+#删除一个目录
+rm -rf nginx
+
+文件加权限
+chmode -r 777
+
+top 查看虚拟机运行进程 1 查看cpu
+free -m 查看内存
+df -h 硬盘大小
+
+防火墙
+/sbin/iptables -I INPUT -p tcp --dport 80 -j ACCEPT   80端口防火墙例外
+/etc/rc.d/init.d/iptables save   永久有效
+
+软件授权
+chown root nginx nginx执行脚本的所属人改为root
+chmod u+s nginx 授权
+
+上传 rz
+
+mysql 衍生版
+cat *.sql | mysql uroot -proot -Dtest mysql导入数据
+./startup && tail -f ../logs/catalina.out 运行tomcat并查看日志
+
+jdk安装 linux遇见    原因是centos7只支持64位
+-bash: /usr/local/jdk1.8.0_151/bin/java: /lib/ld-linux.so.2: bad ELF interpreter: No such file or directory(目录)
+
+虚拟机ip不显示:dhclient
+
+dns8.8.8
+domian name system ip转换成主机名或者是主机名转换成ip地址的一种机制域名解析成ip是正向解析
+反之反向解析
+
+if("asb"   instanceof   String){  //执行代码 };
+解释：也就是说abc是否可以转换为字符串类型，如果可以的话，返回真。
+
+setAccessible , 取消java语言访问private,protected方法、变量
+
+scope : provided 编译的时候需要,maven打war包时忽略次依赖 比如service-api 编译时会用到,部署时tomcat中就有service-api默认会找tomcat所以去除
+
+ngrok authtoken 6TdXvnBBjU2VLQJT2txV7_7ZvE3qacztWZg2es75P4f
+ngrok http 80
+
+spring bean引用其他bean <property name = "car" ref = "id">
+PropertyPlaceholderConfigurer
+
+boss.wmqt.net
+
+nerd tree
+
+PosWmqt.net
+Pospay.*
+e3 服务器
+服务器 123.56.17.13 
+   root  Wmqt@123456!~
+
+ 物联网平台
+	http://ec.iot.10086.cn/sso/security/login
+	账号：ec_100119212
+	密码：ec_12345678A
+
+   one.net 智能设备流量监控平台
+   https://open.iot.10086.cn/doc
+
+http://api.iot.10086.cn/apiDocuments/apiDocMain.html

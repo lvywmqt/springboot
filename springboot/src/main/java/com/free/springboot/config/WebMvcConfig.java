@@ -76,9 +76,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
         return viewResolver;
     }
 
+    /**
+     * 文件上传配置
+     * @return
+     */
 	@Bean
 	public MultipartConfigElement multipartConfigElement() {
 		MultipartConfigFactory factory = new MultipartConfigFactory();
+		//初始化临时路径
         String location = System.getProperty("user.dir") + "/data/tmp";
         File tmpFile = new File(location);
         if (!tmpFile.exists()) {

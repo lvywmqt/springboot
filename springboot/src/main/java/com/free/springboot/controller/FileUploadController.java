@@ -3,10 +3,10 @@ package com.free.springboot.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Range;
@@ -16,18 +16,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import com.aliyun.oss.OSSException;
+import com.aliyuncs.exceptions.ClientException;
 
 @Controller
 public class FileUploadController {
 	
-	@RequestMapping(value = "tofileUpload")
-	public String toFileUpload() {
-		return "fileUpload";
-	}
-	
-	
+	/**
+	 * 获取word文档内容
+	 * @param file
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "fileUpload" ,method = RequestMethod.POST ,produces="text/plain;charset=UTF-8")
 	public void fileUpload(@RequestParam("file")MultipartFile file) throws IOException{
 		  //用来检测程序运行时间

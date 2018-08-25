@@ -154,7 +154,7 @@
             swf: '/static/lib/webuploader/0.1.5/Uploader.swf',
             chunked: false,
             chunkSize: 512 * 1024,
-            server: '/admin/upload/photo',
+            server: '/ossFileUpload',
             // runtimeOrder: 'flash',
 
             accept: {
@@ -270,8 +270,9 @@
                             data: src,
                             dataType: 'json'
                         }).done(function (response) {
-                            if (response.result) {
-                                img = $('<img src="' + response.result + '">');
+                            if (response.aliOss) {
+                            	alert(response.aliOss)
+                                img = $('<img src="' + response.aliOss + '">');
                                 $wrap.empty().append(img);
                             } else {
                                 $wrap.text("预览出错");
@@ -536,10 +537,11 @@
 
         uploader.onUploadSuccess = function (file, response) {
             // 自定义上传成功处理逻辑
-            var photo_path = response.data.key,
+            var photo_path = response.data.aliOss,
                 photo_width = response.data.width,
                 photo_height = response.data.height,
                 $photo_container = $('.upload-photo-ids-container');
+            alert(photo_path);
             $photo_container.off().append('<input type="hidden" name="photos[' + photo_sequence + '].path" value="' +
                 photo_path + '" />').append('<input type="hidden" name="photos[' + photo_sequence + '].width" value="' +
                 photo_width + '"/>').append('<input type="hidden" name="photos[' + photo_sequence + '].height" value="' +
@@ -558,13 +560,7 @@
             photo_sequence++;
         };
 
-        uploader.on('uploadAccept', function (file, response) {
-            if (response.code !== 200) {
-                // 通过return false来告诉组件，此文件上传有错。
-                alert('Exception: server response code: ' + response.code + 'and message:' + response.message);
-                return false; // 必须返回false 以告诉上传发现错误
-            }
-        });
+
 
         uploader.on('all', function (type) {
             var stats;

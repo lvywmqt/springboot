@@ -98,6 +98,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
 	/**
 	 * Bean util
 	 */
+	@Bean
 	public ModelMapper modelMapper(){
 		return new ModelMapper();
 	}

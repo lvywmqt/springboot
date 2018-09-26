@@ -46,7 +46,6 @@ public class AliossService {
 			// 指定该Object被下载时的内容编码格式
 			metadata.setContentEncoding("utf-8");
 			Date nowDate = new Date();
-			System.out.println(3);
 			// 文件的MIME，定义文件的类型及网页编码，决定浏览器将以什么形式、什么编码读取文件。如果用户没有指定则根据Key或文件名的扩展名生成，
 			// 如果没有扩展名则填默认值application/octet-stream
 			fileName = new DateTime(nowDate).toString("yyyyMMddhhmmssSSSS")
@@ -58,7 +57,6 @@ public class AliossService {
 			PutObjectResult putResult = ossClient.putObject(bucketName , fileName, inputStream, metadata);
 			// 解析结果
 			resultStr = putResult.getETag();
-			System.out.println(fileName);
 			return fileName;
 		} catch (Exception e) {
 			e.printStackTrace();

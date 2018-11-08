@@ -21,4 +21,10 @@ public interface AddressService {
 
 	List<SubwayStationDTO> findAllStationBySubway(Long subwayId);
 
+	ServiceResult<SubwayDTO> findSubway(Long subwayLineId);
+
+	ServiceResult<SubwayStationDTO> findSubwayStation(Long subwayStationId);
+
+	ServiceResult<SupportAddressDTO> findByCity(String cityEnName);
+
 }

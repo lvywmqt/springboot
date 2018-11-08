@@ -537,15 +537,11 @@
 
         uploader.onUploadSuccess = function (file, response) {
             // 自定义上传成功处理逻辑
-            var photo_path = response.data.aliOss,
-                photo_width = response.data.width,
-                photo_height = response.data.height,
+            var photo_path = response.path,
                 $photo_container = $('.upload-photo-ids-container');
             alert(photo_path);
             $photo_container.off().append('<input type="hidden" name="photos[' + photo_sequence + '].path" value="' +
-                photo_path + '" />').append('<input type="hidden" name="photos[' + photo_sequence + '].width" value="' +
-                photo_width + '"/>').append('<input type="hidden" name="photos[' + photo_sequence + '].height" value="' +
-                photo_height + '"/>');
+                photo_path + '" />');
 
             $("#upload-cover-container").append(
                 '<div style="float: left; margin: 2px; padding: 2px; border: 1px dashed; width:' +

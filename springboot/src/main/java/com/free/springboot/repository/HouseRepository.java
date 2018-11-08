@@ -3,7 +3,6 @@ package com.free.springboot.repository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
@@ -11,9 +10,11 @@ import com.free.springboot.entity.House;
 
 
 /**
- * Created by 瓦力.
+ * Created by 张棋.
  */
-public interface HouseRepository extends PagingAndSortingRepository<House, Long>, JpaSpecificationExecutor<House> {
+public interface HouseRepository extends PagingAndSortingRepository<House, Long> ,JpaSpecificationExecutor<House> {
+	
+	// 分页repository PagingAndSortingRepository, JpaSpecificationExecutor 搜索
     @Modifying
     @Query("update House as house set house.cover = :cover where house.id = :id")
     void updateCover(@Param(value = "id") Long id, @Param(value = "cover") String cover);

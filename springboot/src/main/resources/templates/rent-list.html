@@ -224,7 +224,7 @@
                     </div>
                 </div>
             </div>
-            <div class="list-wrap">
+           <div class="list-wrap">
 
                 <ul id="house-lst" class="house-lst">
                     <tr th:each="house, houseStat: ${houses}">
@@ -266,15 +266,7 @@
                                     <div class="chanquan">
                                         <div class="left agency">
                                             <div class="view-label left">
-                                                <span th:if="${house.houseDetail.subwayLineName != null}">
-                                                    <span class="fang-subway"></span>
-                                                    <span class="fang-subway-ex">
-                                                        <span>距离地铁
-                                                            <span th:text="${house.houseDetail.subwayLineName}"></span>
-                                                            <span th:text="${house.houseDetail.subwayStationName}"></span>站
-                                                            <span th:text="${house.distanceToSubway}"></span>米</span>
-                                                    </span>
-                                                </span>
+                                                
                                                 <span th:each="tag: ${house.tags}">
                                                     <span class="decoration"></span>
                                                     <span class="decoration-ex">
@@ -285,7 +277,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> 
                                 <div class="col-3">
                                     <div class="price"><span class="num" th:text="${house.price}">价格</span>元/月
                                     </div>

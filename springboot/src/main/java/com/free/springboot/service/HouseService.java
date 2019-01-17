@@ -29,5 +29,7 @@ public interface HouseService {
 
 	ServiceMultiResult<HouseDTO> query(RentSearch rentSearch);
 
+	ServiceResult<HouseDTO> findCompleteOne(Long houseId);
+
 
 }

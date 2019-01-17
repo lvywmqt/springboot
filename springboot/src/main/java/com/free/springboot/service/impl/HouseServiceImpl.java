@@ -20,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.free.springboot.base.HouseSort;
 import com.free.springboot.base.HouseStatus;
 import com.free.springboot.base.LoginUserUtil;
 import com.free.springboot.dto.HouseDTO;
@@ -44,12 +45,15 @@ import com.free.springboot.repository.SubwayStationRepository;
 import com.free.springboot.service.HouseService;
 import com.free.springboot.service.ServiceMultiResult;
 import com.free.springboot.service.ServiceResult;
+import com.free.springboot.service.serch.SearchService;
 
 @Service
 public class HouseServiceImpl implements HouseService {
 
 	@Autowired
 	private HouseRepository houseRepository;
+	@Autowired
+	private SearchService searchService;
 	@Autowired
 	private ModelMapper modelMapper;
 	@Autowired
@@ -349,32 +353,66 @@ public class HouseServiceImpl implements HouseService {
 		if (house.getStatus() == HouseStatus.DELETED.getValue()) {
 			return new ServiceResult(false, "已删除的资源不允许操作");
 		}
-		
+
 		houseRepository.updateStatus(id, status);
+		if(status == HouseStatus.PASSES.getValue()){
+			searchService.index(id);
+		}else{
+			searchService.remove(id);
+			
+		}
 		return ServiceResult.success();
 	}
 
 	@Override
 	public ServiceMultiResult<HouseDTO> query(RentSearch rentSearch) {
-		//排序
-		Sort sort = new Sort(Sort.Direction.DESC,"lastUpdateTime");
-		//分页
+		// 排序
+		// Sort sort = new Sort(Sort.Direction.DESC,"lastUpdateTime");
+		Sort sort = HouseSort.generateSort(rentSearch.getOrderBy(), rentSearch.getOrderDirection());
+		// 分页
 		int page = rentSearch.getStart() / rentSearch.getSize();
-		Pageable pageable = new PageRequest(page, rentSearch.getSize(),sort);
+		Pageable pageable = new PageRequest(page, rentSearch.getSize(), sort);
 		List<HouseDTO> houseDTOs = new ArrayList<>();
-		//分装查询维度条件
+		// 分装查询维度条件
 		Specification<House> sprcification = new Specification<House>() {
 
 			@Override
 			public Predicate toPredicate(Root<House> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				Predicate predicate = cb.equal(root.get("status"),HouseStatus.PASSES.getValue());
-				predicate = cb.and(predicate ,cb.equal(root.get("cityEnName"), rentSearch.getCityEnName()));
+				Predicate predicate = cb.equal(root.get("status"), HouseStatus.PASSES.getValue());
+				predicate = cb.and(predicate, cb.equal(root.get("cityEnName"), rentSearch.getCityEnName()));
 				return predicate;
 			}
 		};
-		
-		Page<House> houses = houseRepository.findAll(sprcification ,pageable);
-		houses.forEach(house -> houseDTOs.add(modelMapper.map(house, HouseDTO.class)));
+
+		Page<House> houses = houseRepository.findAll(sprcification, pageable);
+		houses.forEach(house -> {
+			houseDTOs.add(modelMapper.map(house, HouseDTO.class));
+			
+		});
 		return new ServiceMultiResult<>(houses.getTotalElements(), houseDTOs);
 	}
+
+	@Override
+	public ServiceResult<HouseDTO> findCompleteOne(Long houseId) {
+		House house = houseRepository.findOne(houseId);
+		HouseDetail houseDetail = houseDetailRepository.findByHouseId(houseId);
+		List<HouseTag> housetags = houseTagRepository.findAllByHouseId(houseId);
+		List<HousePicture> housePictures = housePictureRepository.findAllByHouseId(houseId);
+		List<String> tagList = new ArrayList<>();
+		List<HousePictureDTO> pictureDTOS = new ArrayList<>();
+		housetags.forEach(housetag -> tagList.add(housetag.getName()));
+		housePictures.forEach(housePicture -> pictureDTOS.add(modelMapper.map(housePicture, HousePictureDTO.class)));
+		if (house == null) {
+            return ServiceResult.notFound();
+        }
+		
+		HouseDetailDTO houseDetailDTO = modelMapper.map(houseDetail, HouseDetailDTO.class);
+		
+		HouseDTO result = modelMapper.map(house, HouseDTO.class);
+		result.setHouseDetail(houseDetailDTO);
+		result.setTags(tagList);
+		result.setPictures(pictureDTOS);
+		return ServiceResult.of(result);
+	}
+
 }

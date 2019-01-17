@@ -1,6 +1,7 @@
 package com.free.springboot.controller.house;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -16,11 +18,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.free.springboot.base.ApiResponse;
 import com.free.springboot.base.RentValueBlock;
 import com.free.springboot.dto.SupportAddressDTO;
+import com.free.springboot.dto.UserDTO;
+import com.free.springboot.entity.SupportAddress;
+import com.free.springboot.entity.SupportAddress.Level;
 import com.free.springboot.form.RentSearch;
 import com.free.springboot.service.AddressService;
 import com.free.springboot.service.HouseService;
 import com.free.springboot.service.ServiceMultiResult;
 import com.free.springboot.service.ServiceResult;
+import com.free.springboot.service.UserService;
 import com.free.springboot.dto.HouseDTO;
 import com.free.springboot.dto.SubwayDTO;
 import com.free.springboot.dto.SubwayStationDTO;
@@ -32,6 +38,8 @@ public class HouseController {
 	private AddressService addressService;
 	@Autowired
 	private HouseService houseService;
+	@Autowired
+	private UserService userService;
 	
 	 /**
      * 获取支持城市列表
@@ -137,5 +145,32 @@ public class HouseController {
          return "rent-list";
     	
     }
+    
+	@GetMapping("rent/house/show/{id}")
+	public String show(@PathVariable(value = "id") Long houseId,
+	                       Model model) {
+	 
+        if (houseId <= 0) {
+            return "404";
+        }
+        ServiceResult<HouseDTO> serviceResult = houseService.findCompleteOne(houseId);
+        if (!serviceResult.isSuccess()) {
+        	return "404";
+        }
+        HouseDTO houseDTO = serviceResult.getResult();
+        Map<Level, SupportAddressDTO> addressMap = addressService.findCityAndRegion(houseDTO.getCityEnName(), houseDTO.getRegionEnName());
+        SupportAddressDTO city = addressMap.get(SupportAddress.Level.CITY);
+        SupportAddressDTO region = addressMap.get(SupportAddress.Level.REGION);
+        model.addAttribute("city", city);
+        model.addAttribute("region", region);
+        
+        ServiceResult<UserDTO> userDTOServiceResult = userService.findById(houseDTO.getAdminId());
+        model.addAttribute("agent", userDTOServiceResult.getResult());
+        model.addAttribute("house", houseDTO);
+        
+       /* ServiceResult<Long> aggResult = searchService.aggregateDistrictHouse(city.getEnName(), region.getEnName(), houseDTO.getDistrict());
+        model.addAttribute("houseCountInDistrict", aggResult.getResult());*/
+        return "house-detail";
+	}
 
 }

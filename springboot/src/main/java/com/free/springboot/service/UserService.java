@@ -1,5 +1,6 @@
 package com.free.springboot.service;
 
+import com.free.springboot.dto.UserDTO;
 import com.free.springboot.entity.User;
 
 public interface UserService {
@@ -9,5 +10,7 @@ public interface UserService {
 	User findUserByTelephone(String telephone);
 	
 	User addUserByPhone(String telephone);
+
+	ServiceResult<UserDTO> findById(Long adminId);
 
 }

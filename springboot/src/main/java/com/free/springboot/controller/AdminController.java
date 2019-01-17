@@ -48,6 +48,7 @@ import com.free.springboot.service.HouseService;
 import com.free.springboot.service.ServiceMultiResult;
 import com.free.springboot.service.ServiceResult;
 import com.free.springboot.service.impl.AliossService;
+import com.free.springboot.service.serch.SearchService;
 import com.google.common.base.Strings;
 
 @Controller
@@ -60,6 +61,8 @@ public class AdminController {
 	private HouseService houseService;
 	@Autowired
 	private AddressService addressService;
+	@Autowired
+	private SearchService searchService;
 
 	@Value("${AccessKeyID}")
 	private String AccessKeyID;
@@ -239,6 +242,7 @@ public class AdminController {
 			 return ApiResponse.ofSuccess(ApiResponse.Status.NOT_VALID_PARAM);
 		}
 		ServiceResult result = houseService.update(houseForm);
+		searchService.index(houseForm.getId());
         if (result.isSuccess()) {
             return ApiResponse.ofSuccess(null);
         }

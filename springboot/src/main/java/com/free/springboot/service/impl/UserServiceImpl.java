@@ -6,17 +6,20 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import com.free.springboot.dto.UserDTO;
 import com.free.springboot.entity.Role;
 import com.free.springboot.entity.User;
 import com.free.springboot.repository.RoleRepository;
 import com.free.springboot.repository.UserRepository;
 import com.free.springboot.service.RoleService;
+import com.free.springboot.service.ServiceResult;
 import com.free.springboot.service.UserService;
 
 @Service
@@ -29,6 +32,8 @@ UserServiceImpl implements UserService {
 	private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
 	@Override
 	public User findUserByName(String name,String password) {
@@ -72,6 +77,15 @@ UserServiceImpl implements UserService {
 	@Transactional
 	public User addUserByPhone(String telephone) {
 		return null;
+	}
+
+	@Override
+	public ServiceResult<UserDTO> findById(Long adminId) {
+		User user = userRepository.findOne(adminId);
+		if(user == null){
+			return ServiceResult.notFound();
+		}
+		return ServiceResult.of(modelMapper.map(user, UserDTO.class));
 	}
 	
 }

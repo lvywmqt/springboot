@@ -3,6 +3,8 @@ package com.free.springboot.service.serch;
 import java.util.Date;
 import java.util.List;
 
+import com.free.springboot.dto.BaiduMapLocation;
+
 /**
  *
  * 索引结构模板
@@ -49,8 +51,17 @@ public class HouseIndexTemplate {
 
     private List<String> tags;
 
+    private BaiduMapLocation location;
    
-    public Long getHouseId() {
+    public BaiduMapLocation getLocation() {
+		return location;
+	}
+
+	public void setLocation(BaiduMapLocation location) {
+		this.location = location;
+	}
+
+	public Long getHouseId() {
         return houseId;
     }
 

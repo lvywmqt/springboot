@@ -1,10 +1,13 @@
 package com.free.springboot.controller.house;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,20 +30,23 @@ import com.free.springboot.service.HouseService;
 import com.free.springboot.service.ServiceMultiResult;
 import com.free.springboot.service.ServiceResult;
 import com.free.springboot.service.UserService;
+import com.free.springboot.service.serch.SearchService;
+import com.free.springboot.dto.HouseBucketDTO;
 import com.free.springboot.dto.HouseDTO;
 import com.free.springboot.dto.SubwayDTO;
 import com.free.springboot.dto.SubwayStationDTO;
 
 @Controller
 public class HouseController {
-	
+
 	@Autowired
 	private AddressService addressService;
 	@Autowired
 	private HouseService houseService;
 	@Autowired
 	private UserService userService;
-	
+	@Autowired
+	private SearchService searchService;
 	 /**
      * 获取支持城市列表
      * @return
@@ -172,5 +178,38 @@ public class HouseController {
         model.addAttribute("houseCountInDistrict", aggResult.getResult());*/
         return "house-detail";
 	}
-
+	
+	/**
+     * 自动补全接口
+     */
+    @GetMapping("rent/house/autocomplete")
+    @ResponseBody
+	public ApiResponse autocomplete(String prefix){
+		if(prefix.isEmpty()){
+			return ApiResponse.ofStatus(ApiResponse.Status.BAD_REQUEST);
+		}
+		//ServiceResult<List<String>> result = searchService.suggest(prefix);
+		List<String> list = new ArrayList<>();
+		list.add("a");
+		list.add("b");
+		list.add("c");
+		return ApiResponse.ofSuccess(list);
+	}
+    Logger logger = LoggerFactory.getLogger(HouseController.class);
+	
+    @GetMapping("rent/house/map")
+    public String rentMapPage(
+    		@RequestParam(value = "cityEnName") String cityEnName ,
+    		Model model ,HttpSession session, RedirectAttributes redirectAttributes){
+    	session.setAttribute("enName" ,cityEnName);
+    	ServiceResult<SupportAddressDTO> city = addressService.findByCity(cityEnName);
+    	logger.debug(city.getResult().getCnName());
+    	model.addAttribute("city" ,city.getResult());
+    	ServiceMultiResult<SupportAddressDTO> regions = addressService.findAllRegionsByCityName(cityEnName);
+    	ServiceMultiResult<HouseBucketDTO> serviceResult = searchService.mapAggregate(cityEnName);
+    	model.addAttribute("total" ,serviceResult.getTotal());
+    	model.addAttribute("regions" ,regions.getResult());
+    	model.addAttribute("aggData", serviceResult.getResult());
+    	return "rent-map";
+    }
 }

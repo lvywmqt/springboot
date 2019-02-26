@@ -27,6 +27,8 @@ import java.io.File;
 public class WebMvcConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 	
     private ApplicationContext applicationContext;
+    @Value("${spring.thymeleaf.cache}")
+    private boolean thymeleafCacheEnable = true;
     
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -47,7 +49,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setApplicationContext(this.applicationContext);
         templateResolver.setCharacterEncoding("UTF-8");
-        
+        templateResolver.setCacheable(thymeleafCacheEnable);
         return templateResolver;
     }
 

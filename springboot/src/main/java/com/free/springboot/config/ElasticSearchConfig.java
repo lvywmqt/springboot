@@ -26,7 +26,7 @@ public class ElasticSearchConfig {
     @Bean
     public TransportClient esClient() throws UnknownHostException{
     	Settings settings = Settings.builder()
-    	.put("cluster.name",esName)
+    	.put("cluster.name","my-application")
     	.put("client.transport.sniff",true)
     	.build();
     	

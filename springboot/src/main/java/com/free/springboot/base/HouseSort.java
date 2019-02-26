@@ -40,4 +40,12 @@ public class HouseSort {
 		return new Sort(direction ,key);
 	}
 	
+
+    public static String getSortKey(String key) {
+        if (!SORT_KEYS.contains(key)) {
+            key = DEFAULT_SORT_KEY;
+        }
+
+        return key;
+    }
 }

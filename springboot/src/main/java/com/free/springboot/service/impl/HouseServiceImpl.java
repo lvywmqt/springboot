@@ -224,11 +224,13 @@ public class HouseServiceImpl implements HouseService {
 		modelMapper.map(houseForm, house);
 		house.setLastUpdateTime(new Date());
 		houseRepository.save(house);
-		/*
-		 * if(house.getStatus() == HouseStatus.PASSES.getValue()){
-		 * 
-		 * }
-		 */
+		
+		if(house.getStatus() == HouseStatus.PASSES.getValue()){
+			searchService.index(house.getId());
+		}else{
+			searchService.remove(house.getId());
+		}
+		 
 		return ServiceResult.success();
 	}
 

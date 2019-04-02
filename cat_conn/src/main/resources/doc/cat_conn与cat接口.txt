@@ -1,0 +1,251 @@
+
+http://192.168.155.108:9202/sale  内网
+http://47.104.154.177:9202/sale   正式外网
+
+接口定义:
+
+TCM01M1中需要保存的全局变量：  
+1、主服务器IP PORT（只读）
+2、更新服务器IP PORT
+3、应用服务器IP PORT
+4、当前AES秘钥
+
+服务器需要保存的只读变量：
+1、RSA公钥
+2、默认AES秘钥 
+   AES秘钥更新功能未实现时，先使用AES秘钥"31 32 33 34 35 36 37 38 41 42 43 44 45 46 47 48"("12345678ABCDEFGH")
+
+-----------------------------------------------------方法分割线-----------------------------------------------------
+
+1、获取状态指令: http://47.104.154.177:9202/query
+	服务端请求:
+	{"data":null,"deviceNo":"201803250001","method":"getStatus", "time":"123456789" }
+	 
+
+	切票机返回
+	{"data":{"flag":"true","errcode":1002"},"deviceNo":"201803250001","method":"return_getStatus", "time":"123456789"}
+	 errcode 返回当前的错误状态。
+	
+	备注：
+	当猫状态变化的时候，猫会主动请求后台，发送状态改变的信息到服务器，这个时候因为是猫主动发送信息，那么time字段为"":
+	{"data":{"flag":"true","errcode":1002"},"deviceNo":"201803250001","method":"return_getStatus", "time":""}
+
+-----------------------------------------------------方法分割线-----------------------------------------------------
+2、获取硬件信息指令: http://47.104.154.177:9202/query
+	服务端请求:
+	{"data":null,"deviceNo":"201803250001","method":"getVersion", "time":"123456789"}
+	 
+	切票机返回
+	{"data":{"fwVersion":"xx","hwVersion":"xx","serialNo":"yyy","devtype":"xx"},"deviceNo":"201803250001","method":"return_getVersion", "time":"123456789"}
+	 
+	修改： type->devtype
+	 
+-----------------------------------------------------方法分割线-----------------------------------------------------
+3、获取GPRS模块状态命令: http://47.104.154.177:9202/query
+	服务端请求:
+	{"data":null,"deviceNo":"201803250001","method":"getGprsStatus", "time":"123456789"}
+	 
+	切票机返回
+	{"data":{"ccid":"xx","ip":"xx","signalQuality":"cc","serverIP":xx.xx.xx.xx" },"deviceNo":"201803250001","method":"return_getGprsStatus", "time":"123456789"}
+
+
+-----------------------------------------------------方法分割线-----------------------------------------------------
+4、切票机重启: http://47.104.154.177:9202/conf
+	信号
+	
+	切票机响应服务器3秒后自动重启(延迟3秒是为了保证发送成功)
+
+
+-----------------------------------------------------方法分割线-----------------------------------------------------
+5、获取票长: http://47.104.154.177:9202/query
+	服务端请求:
+	{"data":null,"deviceNo":"201803250001","method":"getTicketLength", "time":"123456789"}
+
+	 
+	切票机响应:
+	{"data":{"ticketLength":"1524"},"deviceNo":"201803250001","method":"return_getTicketLength", "time":"123456789"}
+
+	功能说明: 接收到服务器发来的获取票长命令,TCM01M1把当前票长参数返回服务器。
+
+
+-----------------------------------------------------方法分割线-----------------------------------------------------
+6、服务端更新票长: http://47.104.154.177:9202/conf
+	服务端请求:
+	{"data":{"ticketLength":1524 },"deviceNo":"201803250001","method":"updateTicketLength", "time":"123456789"}
+	 
+	切票机响应:
+	{"data":{"flag":"true", "errcode":"1002"},"deviceNo":"201803250001","method":"return_updateTicketLength", "time":"123456789"}
+
+	功能说明: 接收到服务器发来的更新票长命令,TCM01M1把票长参数记录到本地变量, 返回执行结果给服务器。
+
+ 
+-----------------------------------------------------方法分割线-----------------------------------------------------	
+7、服务端请求出票: http://47.104.154.177:9202/sale 
+	第一种情况，time有数值：
+	---------开始----------第一种情况，time有数值：------------------
+	【
+	服务端请求:
+	{"data":{"requestSaleNum":"6","orderNo":"A3101040000120180413140043197"},"deviceNo":"201803250001","method":"cutTicket", "time":"123456789"}
+	 
+	切票机响应:
+	{"data":{"requestSaleNum":"6","realSaleNum":"3","errcode":"1002","orderNo":"A3101040000120180413140043197"},"deviceNo":"201803250001","method":"return_cutTicket", "time":"123456789"}
+	
+	服务器再次回应：
+	
+	1.服务器接收成功：
+	{"data":{"orderNo":"A3101040000120180413140043197","flag":"true"},"deviceNo":"201803250001","method":"roger_return_cutTicket", "time":""}
+	2.服务器接收失败：
+	{"data":{"orderNo":"A3101040000120180413140043197","flag":"false"},"deviceNo":"201803250001","method":"roger_return_cutTicket", "time":""}
+	
+	猫收到服务端返回的出票结果确认信息后回复：
+	    切票机发送:
+    {"data":{"ready":"true"},"deviceNo":"201803250001", "method":"ready_receive_instruction", "time":""}
+	--------结束-----------第一种情况，time有数值：------------------
+	
+	
+	
+	第二种情况，time无数值：
+	
+	---------开始----------第二种情况，time无数值：------------------
+	【
+	服务端请求:
+	{"data":{"requestSaleNum":"6","orderNo":"A3101040000120180413140043197"},"deviceNo":"201803250001","method":"cutTicket", "time":""}
+	 
+	切票机响应:
+	{"data":{"requestSaleNum":"6","realSaleNum":"3","errcode":"1002","orderNo":"A3101040000120180413140043197"},"deviceNo":"201803250001","method":"return_cutTicket", "time":""}
+	
+	服务器再次回应：
+	
+	1.服务器接收成功：
+	{"data":{"orderNo":"A3101040000120180413140043197","flag":"true"},"deviceNo":"201803250001","method":"roger_return_cutTicket", "time":""}
+	2.服务器接收失败：
+	{"data":{"orderNo":"A3101040000120180413140043197","flag":"false"},"deviceNo":"201803250001","method":"roger_return_cutTicket", "time":""}
+	
+	猫收到服务端返回的出票结果确认信息后回复：
+	    切票机发送:
+    {"data":{"ready":"true"},"deviceNo":"201803250001", "method":"ready_receive_instruction", "time":""}
+	--------结束-----------第二种情况，time无数值：------------------
+	
+	
+	
+标记：下面的【说明1】为原始版本，不准确，当前猫的固件的说明参考【说明2】:
+	说明1：  
+		1) 请求命令中加入最多32位的订单号，返回数据或保存时要记录订单号。
+		2) 在切票前把命令中的orderNo time requestSaleNum参数记录到本地存储。
+		3) 每切一张票记录一次，使用INT32类型 每个bit记录一张票，防备突然断电。
+		4) 切票机执行完成后，循环3次：向服务发送响应return_cutTicket，然后在3000ms内等待服务器确认消息roger_return_cutTicket，若超时重发。
+		5) 如果发送3次都超时，记录到本地存储中。如果发送成功，使用标志清除本地存储。
+		6) 若网络中断或其他原因导致发送未成功，保留此条记录，下次重启后使用命令uploadCutTicketResult再次上传。
+		
+		1-3、6步暂时不做，先完成整个流程和固件更新。 
+ 
+ 	说明2：
+ 		切票机执行完成后，向服务发送响应return_cutTicket，然后在10s内等待服务器确认消息roger_return_cutTicket，若超时重发，只重试这1次。
+		
+
+-----------------------------------------------------方法分割线-----------------------------------------------------
+8、固件更新: http://47.104.154.177:9202/update
+	1)服务端发送固件更新请求:（如果开机后devceInit告知要更新固件，没有这一步）
+		备注：下面的命令中，datalen字段没有用到。
+		{"data":{"fwVersion":"52200306", "datalen":"32679"},"deviceNo":"201803250001","method":"need_updateFirmware", "time":"123456789"}
+	2)切票机响应：
+	    {"data":{"received":"true"},"deviceNo":"201803250001","method":"return_need_updateFirmware", "time":"123456789"}
+	3)切票机按照数据长度和分包大小，依次发送获取数据包请求：
+		{"data":{"fwVersion":"52200306", "pkgno":"1","pkgsize":"512"},"deviceNo":"201803250001","method":"updateFirmware", "time":"123456789"}
+	 
+	4)服务器根据切票机请求的包序号和包大小，读取固件文件片段返回给切票机：
+
+		{"data":{"fwVersion":"52200306", "pkgno":"1","datalen":"512","firmware":"AESF..WR...fsyukfsd==", "md5sum":"AUSE…QT=="},"deviceNo":"201803250001","method":"updateFirmware", "time":"123456789"}
+		{"data":{"fwVersion":"52200306", "pkgno":"x","datalen":"389","firmware":"AESF..WRJAD...skfsd==", "md5sum":"AUSE…QT=="，"filemd5sum":"USE…QT=="},"deviceNo":"201803250001","method":"return_updateFirmware", "time":"123456789"}
+
+		【2018年4月20日】，上面的两行数据修改为下面的格式（原因：猫下载固件时候方便判断前面的数据，根据前面的数据判断服务端返回的数据是否为返回固件包的命令。）
+		{"method":"return_updateFirmware","data":{"fwVersion":"50200309","pkgno":"1","firmware":"sLUAIgDgUhw=","datalen":"512","md5sum":"6F3C98ABE0B2A1C9F69F31DA4A874A56"},"deviceNo":"sz201804100001","time":""}
+		
+		
+		第"2-3"步需要根据文件长度多次执行。
+		
+		
+	5)当接收数据错误时，切票机可以重复请求，多次错误后可发送命令终止固件更新过程：
+	2018年4月22日，记录，下面这条命令客户端没有实现:
+		{"data":{"fwVersion":"52200306", "update":"failed","errcode":"1002"},"deviceNo":"201803250001","method":"updateFirmware", "time":"123456789"}
+		
+	6) 当固件更新成功后，自动重启，重新向服务器发送请求，服务器收到请求时，恢复到初始状态。
+
+
+****** 以上命令1-8是和流程无关的，无论何时收到服务器(任意)发送的命令，都要返回结果； 这样可以避免和服务器流程关联。****** 
+
+	
+
+-----------------------------------------------------方法分割线-----------------------------------------------------
+
+9、开机后第一次连接主服务器MainServer上传状态： 
+	 
+	切票机上电初始化成功后发送命令：
+		{
+			"data":{"fwVersion":"xx1","hwVersion":"xxx","serialNo":"yyy","devtype":"TCM01M1" },
+			"deviceNo":"201803250001","method":"deviceInit", "time":"123456789"}
+	 单行：	{"data":{"fwVersion":"xx1","hwVersion":"xxx","serialNo":"yyy","devtype":"TCM01M1" },"deviceNo":"201803250001","method":"deviceInit", "time":"123456789"}
+	 
+	服务端根据设备类型和版本，判断是否需要刷新，同时返回业务服务器的serverip和port:
+	{	"data":{"updateServerIP":"x.x.x.x", "updateServerPort":"yyy", "fwVersion":"52200306", "needUpdate":"false", 
+			"connectionServerIP":"xx.xx.xx.xx", "connectionServerPort":"yy" 
+			"ticketLength":"1524"}, 
+		"deviceNo":"201803250001","method":"return_deviceInit", "time":"123456789"} 
+	
+
+
+10、第一次连接ConnctionServer后主动上传状态指令: http://47.104.154.177:9202/query
+	切票机发送:
+	{"data":null,"deviceNo":"201803250001","method":"uploadDeviceStatus", "time":"" }
+	 
+
+	服务器响应：
+	{"data":{"flag":"true"},"deviceNo":"201803250001","method":"return_uploadDeviceStatus", "time":""}
+
+
+11、主动上传出票结果	
+	切票机发送:
+	{"data":{"requestSaleNum":"6","realSaleNum":"3","errcode":"1002","orderNo":"A3101040000120180413140043197"},"deviceNo":"201803250001", "method":"uploadCutTicketResult", "time":""}
+	 
+	服务器响应:
+	{"data":{"orderNo":"A3101040000120180413140043197"},"deviceNo":"201803250001","method":"return_uploadCutTicketResult", "time":""} 
+	
+	每次开机完成设备初始化后和网络参数配置后，逐条取出数据，上传到服务器。存储区大小要考虑写入次数，寿命和查询时间，在产品生命周期内存储区不能写坏。
+	
+	更新流程: 
+		1. 重新连接固件更新服务器，
+		2. 从pkgno=1开始向服务器请求数据。
+		3. firmware: 对数据片段进行base64签名；datalen：数据的长度，不是编码后的长度。
+		4. md5sum: 对数据片段进行MD5签名，格式如："md5sum":"c7b675e75a6f3fc77d3ea8fa090babc1"
+		5. 当是最后一包时，data中加入 "filemd5sum"字段，对整个固件的MD5SUM进行校验  
+		6. 切票机接收到最后一包且验证成功后，相应服务器开始更新固件。 
+		7. pkgsize表示切票机每次最大接收的数据量大小，在多次请求中保持不变；datalen一般和pkgsize保持一致，最后一包可能会小于pgksize
+		8. 最后一包中包含字段 filemd5sum，切票机根据这个字段判断是否只最后一包。
+
+****** 命令9-11 是和流程相关的，制定流程后，尽量不要修改服务器和切票机的交互流程。****** 
+		
+		
+以下命令先保留，客户端和服务端先不实现（2018年4月23日下午）：
+11、主动上传可以接收指令
+    切票机发送:
+    {"data":{"ready":"true"},"deviceNo":"201803250001", "method":"ready_receive_instruction", "time":""}
+
+    服务器响应:
+    {"data":{"received":"true"},"deviceNo":"201803250001","method":"ready_receive_instruction", "time":""} 
+   
+12、服务器发送心跳
+    服务器发送：a
+    切票机响应：b
+
+切票机上电工作流程：
+1、切票机上电后，M26模块联网后，根据默认的MainServerIP地址连接服务器。
+2、***连接服务器成功后，给服务器发送命令 deviceInit, 告知服务器当前设备的类型 硬件版本 固件版本 设备序列号。
+3、服务器查询数据库，判断是否需要立即更新固件，给设备发送更新服务器UpdateServerIP&port、固件版本，ConnectionServerIP&PORT.
+4、切票机收到响应后，如果需要进固件更新且当前连接与更新服务器连接不匹配，断开连接，重新连接更新服务器。
+5、从更新服务器上下载固件文件片段，全部下载完成后进行固件更新并重启；如果更新失败，反馈服务器错误信息。并重启
+6、如果第3步判断不需要固件更新， 则更新票长参数；然后开始连接应用服务器，若当前服务器不是应用服务器时，断开当前连接，重新连接应用服务器。
+7、***连接到应用服务器后，通过主动上传状态指令uploadDeviceStatus发送设备状态，等待服务器回应，若无回应间隔500ms,发送3次，认为服务器已经收到，继续下一步。
+8、服务器正确回应uploadDeviceStatus命令后， 从本地存储时查询未上传的记录，依次上传，上传成功后使用标志位清除记录。
+9、循环等待服务器发送的指令，接收命令并执行相应的操作。 
+	说明：这里的命令包括状态查询，设置票长、切票命令等。 如果业务服务器按照一定的策略判断需要更新固件，
+	      可以通过应用服务器发送重启命令reboot或者固件更新命令need_updateFirmware,实现固件更新。

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cgltech.cat_conn.dal.dao.mybatis.mapper.TerminalTicketResultMapper">
+
+    <resultMap id="BaseResultMap" type="com.cgltech.cat_conn.dal.entity.TerminalTicketResult">
+        <id column="id" property="id"/>
+        <result column="request_sale_num" property="requestSaleNum"/>
+        <result column="real_sale_num" property="realSaleNum"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="device_no" property="deviceNo"/>
+        <result column="error_code" property="errorCode"/>
+        <result column="voltage" property="voltage"/>
+        <result column="plate_state" property="plateState"/>
+        <result column="signal_quality" property="signalQuality"/>
+    </resultMap>
+
+    <sql id="TableName">
+		terminal_ticket_result
+	</sql>
+
+    <sql id="Base_Column_List">
+		id, request_sale_num, real_sale_num, order_no, device_no,error_code,voltage,plate_state,signal_quality
+  	</sql>
+
+    <insert id="insert" parameterType="com.cgltech.cat_conn.dal.entity.TerminalTicketResult">
+        insert into
+        <include refid="TableName"/>
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        (
+        #{id},#{requestSaleNum},#{realSaleNum},#{orderNo},#{deviceNo},#{errorCode},#{voltage},#{plateState},#{signalQuality}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.cgltech.cat_conn.dal.entity.TerminalTicketResult">
+        UPDATE
+        <include refid="TableName"/>
+        SET
+        real_sale_num=#{realSaleNum}
+        WHERE
+        order_no = #{orderNo} and device_no=#{deviceNo}
+    </update>
+
+    <delete id="delete" parameterType="com.cgltech.cat_conn.dal.entity.TerminalTicketResult">
+        DELETE
+        FROM
+        <include refid="TableName"/>
+        WHERE
+        id = #{id}
+    </delete>
+
+    <select id="selectList" parameterType="com.cgltech.cat_conn.dal.entity.TerminalTicketResult" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="TableName"/>
+        WHERE
+        order_no = #{orderNo}
+    </select>
+
+    <select id="selectOne" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="TableName"/>
+        WHERE
+        order_no = #{orderNo}
+    </select>
+
+</mapper>

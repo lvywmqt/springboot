@@ -1,0 +1,66 @@
+1、开机请求票长参数：
+	终端请求：
+	{"data":null,"deviceNo":"201803250001","method":"requestTicketLength"}
+ 
+	服务端响应：
+	{"data":{"ticketLength":"1524"},"deviceNo":"201803250001","method":"updateTicketLength"}
+
+	  
+	终端返回
+	{"data":{"flag":"true"},"deviceNo":"201803250001","method":"return_updateTicketLength","time":""}
+ 
+-----------------------------------------------------方法分割线-------------------------------------
+2、获取票长：
+	终端请求：
+	{"data":null,"deviceNo":"201803250001","method":"getTicketLength"}
+
+	 
+	服务端响应：
+	{"data":{"ticketLength":"1524"},"deviceNo":"201803250001","method":"return_getTicketLength","time":"1523123231994"}
+
+	 
+-----------------------------------------------------方法分割线--------------------------------------------------------------------
+3、服务端更新票长
+	服务端请求：
+	{"data":{"ticketLength":1524},"deviceNo":"201803250001","method":"updateTicketLength"}
+	 
+	终端返回
+	{"data":{"flag":"true"},"deviceNo":"201803250001","method":"return_updateTicketLength","time":"1523123231994"}
+ 
+-----------------------------------------------------方法分割线--------------------------------------------------------------------
+4、服务端请求出票
+	服务端请求：
+	{"data":{"requestSaleNum":"6"},"deviceNo":"201803250001","method":"cutTicket"}
+	 
+	客户端响应：
+	{"data":{"requestSaleNum":"6","realSaleNum":"3"},"deviceNo":"201803250001","method":"return_cutTicket","time":"1523123231994"}
+	 
+-----------------------------------------------------方法分割线--------------------------------------------------------------------
+
+5、获取状态指令
+	服务端请求：
+	{"data":null,"deviceNo":"201803250001","method":"getStatus"}
+	 
+
+	终端返回
+	{"data":{"flag":"true"},"deviceNo":"201803250001","method":"getStatus","time":"1523123231994"}
+	 
+
+-----------------------------------------------------方法分割线--------------------------------------------------------------------
+6、获取硬件信息指令
+	服务端请求：
+	{"data":null,"deviceNo":"201803250001","method":"getVersion"}
+	 
+	终端返回
+	{"data":{"fwVersion":"xx","hwVersion":"xx","serialNo":"cc","type":"xx"},"deviceNo":"201803250001","method":"getVersion","time":"1523123231994"}
+	 
+
+-----------------------------------------------------方法分割线--------------------------------------------------------------------	
+7、获取GPRS模块状态命令
+	服务端请求：
+	{"data":null,"deviceNo":"201803250001","method":"getGprsStatus"}
+	 
+	终端返回
+	{"data":{"ccid":"xx","ip":"xx","signalQuality":"cc"},"deviceNo":"201803250001","method":"getGprsStatus","time":"1523123231994"}
+	 
+

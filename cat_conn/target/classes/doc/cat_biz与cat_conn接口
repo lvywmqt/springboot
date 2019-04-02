@@ -1,0 +1,469 @@
+2018-04-14 15:59:56
+
+协议规则：
+    MD5签名 + {
+        "code":0,
+        "data":{子协议体},
+        "message":"消息内容"
+    }
+签名方法：MD5({
+        "code":0,
+        "data":{子协议体},
+        "message":"消息内容"
+    })
+
+cat_biz请求cat_conn:
+出票请求：
+{
+        "code":0,
+        "data":{
+        	"data": {
+        		"requestSaleNum": "6",
+        		"orderNo": "A3101040000120180413140043197",
+        		"notifyUrl":""
+        	},
+        	"deviceNo": "201803250001",
+        	"method": "cutTicket_cat_biz"
+        },
+        "message":"消息内容"
+}
+
+cat_conn返回：
+成功：
+{
+    "code": 200, 
+    "data": {
+        "method": "return_cutTicket", 
+        "data": {"requestSaleNum":"6","realSaleNum":"3","errcode":"5002","orderId": "20983432432432"}, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "success!"
+}
+
+繁忙：
+{
+    "code": 202, 
+    "data": {
+        "method": "cutTicket_cat_biz", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client busy!"
+}
+
+超时：
+{
+    "code": 203, 
+    "data": {
+        "method": "cutTicket_cat_biz", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client timeout!"
+}
+
+不在线：
+{
+    "code": 204, 
+    "data": {
+        "method": "cutTicket_cat_biz", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "off line!"
+}
+-----------------方法分割线------------------------------------
+cat_biz请求cat_conn:
+出票请求：
+{
+        "code":0,
+        "data":
+        {
+            "data": {
+                "requestSaleNum": "6",
+                "orderNo": "A3101040000120180413140043197"
+            },
+            "deviceNo": "201803250001",
+            "method": "cutTicket"
+        },
+        "message":"消息内容"
+}
+
+
+cat_conn返回：
+成功：
+{
+    "code": 200, 
+    "data": {
+        "method": "return_cutTicket", 
+        "data": {"requestSaleNum":"6","realSaleNum":"3","errcode":"5002","orderId": "20983432432432"}, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "success!"
+}
+
+繁忙：
+{
+    "code": 202, 
+    "data": {
+        "method": "cutTicket", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client busy!"
+}
+
+超时：
+{
+    "code": 203, 
+    "data": {
+        "method": "cutTicket", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client timeout!"
+}
+不在线：
+{
+    "code": 204, 
+    "data": {
+        "method": "cutTicket", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "off line!"
+}
+-----------------方法分割线------------------------------------
+获取票长：
+cat_biz请求：
+{
+        "code":0,
+        "data":	{
+        	"data": null,
+        	"deviceNo": "201803250001",
+        	"method": "getTicketLength"
+        },
+        "message":"消息内容"
+}
+
+	 
+cat_conn响应：
+
+成功：
+{
+	"code": 200,
+	"data": {
+			"data": {
+				"ticketLength": "1524",
+				"time_receive": "2018-04-15 20:09:11.333"
+			},
+			"deviceNo": "201803250001",
+			"method": "return_getTicketLength",
+			"time": "2018-04-15 20:09:01.333"
+
+	},
+	"message": "success!"
+}
+
+
+繁忙：
+{
+    "code": 202, 
+    "data": {
+        "method": "getTicketLength", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client busy!"
+}
+
+超时：
+{
+    "code": 203, 
+    "data": {
+        "method": "getTicketLength", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client timeout!"
+}
+
+不在线：
+{
+    "code": 204, 
+    "data": {
+        "method": "getTicketLength", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "off line!"
+}
+-----------------方法分割线------------------------------------
+更新票长：
+cat_biz请求：
+{
+        "code":0,
+        "data":	{
+        	"data":{"ticketLength":1524},
+        	"deviceNo": "201803250001",
+        	"method": "updateTicketLength"
+        },
+        "message":"消息内容"
+}
+
+cat_conn响应：
+
+成功：
+{
+	"code": 200,
+	"data": {
+		"data": {
+			"errorcode": "1002",
+			"flag": "true",
+			"time_receive": "2018-04-15 20:09:11.333"
+		},
+		"deviceNo": "201803250001",
+		"method": "return_updateTicketLength",
+		"time": "2018-04-15 20:09:01.333"
+
+	},
+	"message": "success!"
+}
+
+
+繁忙：
+{
+    "code": 202, 
+    "data": {
+        "method": "updateTicketLength", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client busy!"
+}
+
+超时：
+{
+    "code": 203, 
+    "data": {
+        "method": "updateTicketLength", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client timeout!"
+}
+
+不在线：
+{
+    "code": 204, 
+    "data": {
+        "method": "updateTicketLength", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "off line!"
+}
+-----------------方法分割线------------------------------------
+获取状态指令:
+cat_biz请求：
+{
+        "code":0,
+        "data":{
+        	"data": null,
+        	"deviceNo": "201803250001",
+        	"method": "getStatus"
+        },
+        "message":"消息内容"
+}
+
+
+
+cat_conn响应
+
+成功：
+{
+	"code": 200,
+	"data": {
+	 	"data": {
+	 		"errorcode":1002",
+			"flag": "true",
+			"time_receive": "2018-04-15 20:09:11.333"
+		 },
+		"deviceNo": "201803250001",
+		"method": "getStatus",
+		"time": "2018-04-15 20:09:01.333"
+	},
+	"message": "success!"
+}
+
+繁忙：
+{
+    "code": 202, 
+    "data": {
+        "method": "getStatus", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client busy!"
+}
+
+超时：
+{
+    "code": 203, 
+    "data": {
+        "method": "getStatus", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client timeout!"
+}
+
+不在线：
+{
+    "code": 204, 
+    "data": {
+        "method": "getStatus", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "off line!"
+}
+-----------------方法分割线------------------------------------
+获取硬件信息:
+cat_biz请求：
+{
+        "code":0,
+        "data":{
+        	"data": null,
+        	"deviceNo": "201803250001",
+        	"method": "getVersion"
+        },
+        "message":"消息内容"
+}
+
+
+
+cat_conn响应
+成功：
+{
+	"code": 200,
+	"data": {
+		"data": {
+			"fwVersion": "xx",
+			"hwVersion": "xx",
+			"serialNo": "yyy",
+			"devtype": "xx",
+			"time_receive": "2018-04-15 20:09:11.333"
+		},
+		"deviceNo": "201803250001",
+		"method": "return_getVersion",
+		"time": "2018-04-15 20:09:01.333"
+	},
+	"message": "success!"
+}
+
+
+繁忙：
+{
+    "code": 202, 
+    "data": {
+        "method": "getVersion", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client busy!"
+}
+
+超时：
+{
+    "code": 203, 
+    "data": {
+        "method": "getVersion", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client timeout!"
+}
+
+不在线：
+{
+    "code": 204, 
+    "data": {
+        "method": "getVersion", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "off line!"
+}
+-----------------方法分割线------------------------------------
+获取GPRS模块状态命令:
+cat_biz请求：
+{
+        "code":0,
+        "data":{
+        	"data": null,
+        	"deviceNo": "201803250001",
+        	"method": "getGprsStatus"
+        },
+        "message":"消息内容"
+}
+
+
+
+cat_conn响应
+成功：
+{
+	"code": 200,
+	"data": {
+		"data": {
+			"ccid": "xx",
+			"ip": "xx",
+			"signalQuality": "cc",
+			"serverIP": "xx.xx.xx.xx",
+			"time_receive": "2018-04-15 20:09:11.333"
+		},
+		"deviceNo": "201803250001",
+		"method": "return_getGprsStatus",
+		"time": "2018-04-15 20:09:01.333"
+	},
+	"message": "success!"
+}
+繁忙：
+{
+    "code": 202, 
+    "data": {
+        "method": "getGprsStatus", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client busy!"
+}
+
+超时：
+{
+    "code": 203, 
+    "data": {
+        "method": "getGprsStatus", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "client timeout!"
+}
+
+不在线：
+{
+    "code": 204, 
+    "data": {
+        "method": "getGprsStatus", 
+        "data": null, 
+        "deviceNo": "xxx"
+    }, 
+    "message": "off line!"
+}
+-----------------方法分割线------------------------------------
+
+
+
+
+
+

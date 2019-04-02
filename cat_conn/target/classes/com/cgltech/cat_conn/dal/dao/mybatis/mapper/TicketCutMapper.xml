@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cgltech.cat_conn.dal.dao.mybatis.mapper.TicketCutMapper">
+
+    <resultMap id="BaseResultMap" type="com.cgltech.cat_conn.dal.entity.TicketCut">
+        <id column="id" property="id"/>
+        <result column="request_sale_num" property="requestSaleNum"/>
+        <result column="success_sale_num" property="successSaleNum"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="device_no" property="deviceNo"/>
+        <result column="method" property="method"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="time_stamp" property="timestamp"/>
+        <result column="response_status" property="responseStatus"/>
+        <result column="status" property="status"/>
+        <result column="notify_url" property="notifyUrl"/>
+    </resultMap>
+
+    <sql id="TableName">
+		ticket_cut
+	</sql>
+
+    <sql id="Base_Column_List">
+		id, request_sale_num, success_sale_num, order_no, device_no, method,create_time, update_time,time_stamp,response_status,status,notify_url
+  	</sql>
+
+    <insert id="insert" parameterType="TicketCut">
+        insert into
+        <include refid="TableName"/>
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        (
+        #{id},#{requestSaleNum},#{successSaleNum},#{orderNo},#{deviceNo},#{method},#{createTime},#{updateTime},#{timestamp},#{responseStatus},#{status},#{notifyUrl}
+        )
+    </insert>
+
+    <update id="update" parameterType="TicketCut">
+        UPDATE
+        <include refid="TableName"/>
+        SET
+        success_sale_num=#{successSaleNum},update_time=#{updateTime},status=#{status}
+        WHERE
+        order_no = #{orderNo} and device_no=#{deviceNo}
+    </update>
+
+    <delete id="delete" parameterType="TicketCut">
+        DELETE
+        FROM
+        <include refid="TableName"/>
+        WHERE
+        id = #{id}
+    </delete>
+
+    <select id="selectList" parameterType="TicketCut" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="TableName"/>
+        WHERE
+        order_no = #{orderNo}
+    </select>
+
+    <select id="selectOne" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="TableName"/>
+        WHERE
+        order_no = #{orderNo}
+    </select>
+
+    <select id="selectCompleteTicketCut" resultMap="BaseResultMap">
+        select * from (select t.device_no,t.order_no,t.request_sale_num,sum(tc.`success_sale_num`) as success_sale_num
+         ,count(case tc.`status` when 0 then 1 when 1 then 1 END) as not_deal_num          
+        from ticket_cut t INNER JOIN `ticket_cut_details` tc on t.id = tc.`ticket_cut_id` 	
+		WHERE t.`status` = 0
+		GROUP BY t.`id`) temp where temp.not_deal_num = 0
+    </select>
+
+    <select id="selectUnResponseTicketCut" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>,
+        (select max(errcode) FROM `ticket_cut_details` tc WHERE t.id = tc.`ticket_cut_id`) errcode 
+        FROM
+        ticket_cut t
+        where t.status > 0 and response_status = 0
+    </select>
+    
+    <update id="updateResponseStatus" parameterType="TicketCut">
+        UPDATE
+        <include refid="TableName"/>
+        SET
+        response_status = #{responseStatus},update_time=#{updateTime}
+        WHERE
+        id = #{id}
+    </update>
+</mapper>

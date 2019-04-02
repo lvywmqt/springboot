@@ -1,0 +1,23 @@
+#\u6570\u636e\u6e901
+url:jdbc:mysql://rm-m5e94iffh02a106p5.mysql.rds.aliyuncs.com:3306/cat_biz_test1?useUnicode=true&amp;characterEncoding=utf8&amp;characterSetResults=utf8 
+driverClassName:com.mysql.jdbc.Driver
+username:cat_biz
+password:cat_biz
+filters:stat
+maxActive:20
+initialSize:1
+maxWait:60000
+minIdle:10
+maxIdle:15
+timeBetweenEvictionRunsMillis:60000
+minEvictableIdleTimeMillis:300000
+validationQuery:SELECT 'x'
+testWhileIdle:true
+testOnBorrow:false
+testOnReturn:false
+maxOpenPreparedStatements:20
+removeAbandoned:true
+removeAbandonedTimeout:1800
+logAbandoned:true
+
+

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cgltech.cat_conn.dal.dao.mybatis.mapper.TicketCutDetailsMapper">
+    <resultMap id="BaseResultMap" type="com.cgltech.cat_conn.dal.entity.TicketCutDetails">
+        <id column="id" property="id"/>
+        <result column="ticket_cut_id" property="ticketCutId"/>
+        <result column="request_sale_num" property="requestSaleNum"/>
+        <result column="success_sale_num" property="successSaleNum"/>
+        <result column="serial_num" property="serialNum"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="device_no" property="deviceNo"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="time_stamp" property="timestamp"/>
+        <result column="cut_ticket_status" property="cutTicketStatus"/>
+        <result column="status" property="status"/>
+        <result column="errcode" property="errcode"/>
+    </resultMap>
+
+    <sql id="TableName">
+        ticket_cut_details
+    </sql>
+
+    <sql id="Base_Column_List">
+        id,ticket_cut_id,request_sale_num, success_sale_num,serial_num, order_no,device_no,create_time, update_time,time_stamp,cut_ticket_status,status,errcode
+    </sql>
+
+    <insert id="insert" parameterType="TicketCutDetails">
+        insert into
+        <include refid="TableName"/>
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        (
+        #{id},#{ticketCutId},#{requestSaleNum},#{successSaleNum},#{serialNum},#{orderNo},#{deviceNo},#{createTime},#{updateTime},#{timestamp},#{cutTicketStatus},#{status},#{errcode}
+        )
+    </insert>
+
+    <update id="update" parameterType="TicketCutDetails">
+        UPDATE
+        <include refid="TableName"/>
+        SET
+        success_sale_num=#{successSaleNum},update_time=#{updateTime},time_stamp=#{timestamp},cut_ticket_status=#{cutTicketStatus},status=#{status},errcode=#{errcode}
+        WHERE
+        id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="TicketCutDetails">
+        DELETE
+        FROM
+        <include refid="TableName"/>
+        WHERE
+        id = #{id}
+    </delete>
+
+    <select id="selectList" parameterType="TicketCutDetails" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="TableName"/>
+        WHERE
+        order_no = #{orderNo}
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO
+        <include refid="TableName"/>
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        <foreach collection="list" item="detail" separator=",">
+            (
+            #{detail.id},
+            #{detail.ticketCutId},
+            #{detail.requestSaleNum},
+            #{detail.successSaleNum},
+            #{detail.serialNum},
+            #{detail.orderNo},
+            #{detail.deviceNo},
+            #{detail.createTime},
+            #{detail.updateTime},
+            #{detail.timestamp},
+            #{detail.cutTicketStatus},
+            #{detail.status},
+            #{detail.errcode}
+            )
+        </foreach>
+    </insert>
+    
+    <update id="updateTicketCutResult" parameterType="TicketCutDetails">
+        UPDATE
+        <include refid="TableName"/>
+        SET
+        success_sale_num=#{successSaleNum},update_time=#{updateTime},time_stamp=#{timestamp},cut_ticket_status=#{cutTicketStatus},status=#{status},errcode=#{errcode}
+        WHERE
+        id=#{id}
+    </update>
+
+    <select id="selectOriginalResult" resultMap="BaseResultMap">
+        SELECT t.id, t.order_no,t.device_no,t.request_sale_num
+            FROM ticket_cut_details as t 
+            WHERE t.status = 0
+                  AND t.serial_num = ( 
+                    SELECT min(b.serial_num) 
+                    FROM ticket_cut_details as b  
+                    WHERE t.device_no = b.device_no AND b.status = 0
+                )
+    </select>
+
+    <update id="updateStatus" >
+        UPDATE
+        <include refid="TableName"/>
+        SET
+        update_time=#{updateTime}, status=#{newStatus}
+        WHERE
+        id=#{id} and status=#{oldStatus}
+    </update>
+    
+    <update id="updateStatusToTimeOut">
+        UPDATE
+        <include refid="TableName"/>
+        SET
+        update_time=#{updateTime}, status=(CASE status WHEN 0 THEN 4 WHEN 1 THEN 5 END), errcode = 5009
+        WHERE
+        update_time &lt; #{timeOut} and status &lt; 2
+    </update>
+</mapper>

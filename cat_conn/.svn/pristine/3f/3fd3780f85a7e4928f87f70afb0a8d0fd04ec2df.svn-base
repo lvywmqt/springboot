@@ -1,0 +1,119 @@
+package com.cgltech.cat_conn.task;
+
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.cgltech.cat_conn.dal.common.TicketCutResponseStatus;
+import com.cgltech.cat_conn.dal.dao.mybatis.mapper.TicketCutMapper;
+import com.cgltech.cat_conn.dal.entity.TicketCut;
+import com.cgltech.cat_conn.server.cat.TransmissionParameterVO;
+import com.cgltech.cat_conn.util.CatPacketData;
+import com.cgltech.cat_conn.util.CatSignatureUtil;
+import com.cgltech.cat_conn.util.HttpClientCommon;
+
+/**
+ * 异步通知出票结果定时任务
+ * @author User
+ *
+ */
+public class CutTicketResultResponse {
+    private static final Logger logger = LoggerFactory.getLogger(CutTicketResultResponse.class);
+
+    @Autowired
+    private TicketCutMapper<TicketCut> ticketCutMapper;
+
+    public void run(){
+    	
+    	List<TicketCut> ticketCuts = ticketCutMapper.selectUnResponseTicketCut();
+    	
+    	if (ticketCuts != null && ticketCuts.size() > 0) {
+    		logger.info("Task-未通知出票结果处理开始：共[{}]", ticketCuts.size());
+			for (TicketCut ticketCut : ticketCuts) {
+				 handle(ticketCut);
+			}
+		}
+    }
+    
+    private void handle(TicketCut ticketCut){
+		new Thread(() -> {
+			try{
+				TransmissionParameterVO tpVO = generate(ticketCut);
+
+				String result = send(ticketCut.getNotifyUrl(), tpVO);
+		    	
+		    	handleResult(ticketCut, result);
+			}catch (Exception e) {
+				logger.error("Task-通知出票结果错误，订单：[{}]",ticketCut, e);
+			}
+		}).start();
+    }
+    
+    private String send(String notifyUrl, TransmissionParameterVO tpVO){
+    	
+    	CatPacketData catPacketData = new CatPacketData();
+		catPacketData.setData(tpVO);
+		
+    	String jsonStr = JSONObject.toJSONString(catPacketData, SerializerFeature.WriteMapNullValue);
+    	
+    	String sign = CatSignatureUtil.sign(jsonStr);
+    	
+    	jsonStr = sign + jsonStr;
+    	
+    	logger.info("Task-异步通知出票结果发送：[{}]", jsonStr);
+    	
+    	String result = HttpClientCommon.httpPost(notifyUrl, jsonStr);
+    	
+    	logger.info("Task-异步通知出票结果返回：[{}]", result);
+    	
+    	return result;
+    }
+    
+    private void handleResult(TicketCut ticketCut, String result){
+    	if (!StringUtils.isEmpty(result)) {
+    		String sign = CatSignatureUtil.getSign(result);
+			result = CatSignatureUtil.getContent(result);
+			
+			CatPacketData catPacketData = JSONObject.parseObject(result, CatPacketData.class);
+	    	
+	    	if (catPacketData.getCode() == CatPacketData.CODE_SUCCESS
+	    			&& CatSignatureUtil.checkSign(result, sign)) {
+	    		TicketCut update = new TicketCut();
+	    		update.setId(ticketCut.getId());
+	    		update.setUpdateTime(new Date());
+	    		update.setResponseStatus(TicketCutResponseStatus.RESPONSE.getValue());
+	    		ticketCutMapper.updateResponseStatus(update);
+			}
+		}
+    }
+    private TransmissionParameterVO generate(TicketCut ticketCut){
+    	TransmissionParameterVO tpVO = new TransmissionParameterVO();
+		
+		tpVO.setDeviceNo(ticketCut.getDeviceNo());
+
+		tpVO.setMethod("return_cutTicket");
+		tpVO.setTime("");
+		
+		JSONObject data = new JSONObject(true);
+		
+		if(ticketCut.getErrcode() == null){
+			data.put("errcode", "0");
+		}else{
+			data.put("errcode", ticketCut.getErrcode());
+		}
+		
+		data.put("requestSaleNum", ticketCut.getRequestSaleNum());
+		data.put("orderNo", ticketCut.getOrderNo());
+		data.put("realSaleNum", ticketCut.getSuccessSaleNum());
+
+		tpVO.setData(data);
+		
+		return tpVO;
+    }
+}

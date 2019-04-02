@@ -1,0 +1,30 @@
+package com.cgltech.cat_conn.server.cat;
+
+import io.netty.channel.Channel;
+
+public class CatConnection {
+	
+	private boolean allowSendInstruction;	    //猫的状态（能否发送指令）
+	private String connectTime;	                //开始建立长连接的时间
+
+	private Channel channel;
+	
+	public Channel getChannel() {
+		return channel;
+	}
+	public void setChannel(Channel channel) {
+		this.channel = channel;
+	}
+	public String getConnectTime() {
+		return connectTime;
+	}
+	public void setConnectTime(String connectTime) {
+		this.connectTime = connectTime;
+	}
+	public boolean isAllowSendInstruction() {
+		return allowSendInstruction;
+	}
+	public void setAllowSendInstruction(boolean allowSendInstruction) {
+		this.allowSendInstruction = allowSendInstruction;
+	}
+}

@@ -1,0 +1,206 @@
+package com.cgltech.cat_conn.dal.entity;
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * 猫通讯记录明细表映射类
+ */
+public class TicketCutDetails implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2634406978311411873L;
+	/**
+     * 主键
+     */
+    private String id;
+    /**
+     * 猫通讯记录表主键
+     */
+    private String ticketCutId;
+    /**
+     * 请求切票数量
+     */
+    private Integer requestSaleNum;
+
+    /**
+     * 成功出票数
+     */
+    private Integer successSaleNum;
+    /**
+     * 订单号
+     */
+    private String orderNo;
+    /**
+     * 设备编号
+     */
+    private String deviceNo;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
+    /**
+     * 时间戳
+     */
+    private String timestamp;;
+    /**
+     * 请求响应状态
+     * 0--初始，1--响应成功
+     */
+    private Integer cutTicketStatus;
+    /**
+     * 订单状态
+     * 0--初始，1--出票中，2--出票成功,3--出票失败
+     */
+    private Integer status;
+    /**
+     * 切票机返回错误码
+     */
+    private String errcode;
+
+    private Long serialNum;
+    
+    public String getId() {
+        return id;
+    }
+
+    public String getTicketCutId() {
+        return ticketCutId;
+    }
+
+    public Integer getRequestSaleNum() {
+        return requestSaleNum;
+    }
+
+    public Integer getSuccessSaleNum() {
+        return successSaleNum;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public Integer getCutTicketStatus() {
+        return cutTicketStatus;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public String getErrcode() {
+        return errcode;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setTicketCutId(String ticketCutId) {
+        this.ticketCutId = ticketCutId;
+    }
+
+    public void setRequestSaleNum(Integer requestSaleNum) {
+        this.requestSaleNum = requestSaleNum;
+    }
+
+    public void setSuccessSaleNum(Integer successSaleNum) {
+        this.successSaleNum = successSaleNum;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setCutTicketStatus(Integer cutTicketStatus) {
+        this.cutTicketStatus = cutTicketStatus;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public void setErrcode(String errcode) {
+        this.errcode = errcode;
+    }
+    
+	public String getDeviceNo() {
+		return deviceNo;
+	}
+
+	public void setDeviceNo(String deviceNo) {
+		this.deviceNo = deviceNo;
+	}
+
+	public Long getSerialNum() {
+		return serialNum;
+	}
+
+	public void setSerialNum(Long serialNum) {
+		this.serialNum = serialNum;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("TicketCutDetails [id=");
+		builder.append(id);
+		builder.append(", ticketCutId=");
+		builder.append(ticketCutId);
+		builder.append(", requestSaleNum=");
+		builder.append(requestSaleNum);
+		builder.append(", successSaleNum=");
+		builder.append(successSaleNum);
+		builder.append(", orderNo=");
+		builder.append(orderNo);
+		builder.append(", deviceNo=");
+		builder.append(deviceNo);
+		builder.append(", createTime=");
+		builder.append(createTime);
+		builder.append(", updateTime=");
+		builder.append(updateTime);
+		builder.append(", timestamp=");
+		builder.append(timestamp);
+		builder.append(", cutTicketStatus=");
+		builder.append(cutTicketStatus);
+		builder.append(", status=");
+		builder.append(status);
+		builder.append(", errcode=");
+		builder.append(errcode);
+		builder.append(", serialNum=");
+		builder.append(serialNum);
+		builder.append("]");
+		return builder.toString();
+	}
+	
+	
+}

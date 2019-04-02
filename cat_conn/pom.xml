@@ -1,0 +1,358 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.cgltech</groupId>
+  <artifactId>cat_conn</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>cat_conn</name>
+  <url>http://maven.apache.org</url>
+
+  <dependencies>
+	  <dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-context</artifactId>
+		  <version>${spring.version}</version>
+	  </dependency>
+	  <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-web</artifactId>
+          <version>${spring.version}</version>
+      </dependency>
+	  <dependency>
+		  <groupId>mysql</groupId>
+		  <artifactId>mysql-connector-java</artifactId>
+		  <version>5.1.34</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>com.alibaba</groupId>
+		  <artifactId>druid</artifactId>
+		  <version>1.0.9</version>
+	  </dependency>
+
+	  <dependency>
+		  <groupId>org.mybatis</groupId>
+		  <artifactId>mybatis</artifactId>
+		  <version>3.3.1</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.mybatis.caches</groupId>
+		  <artifactId>mybatis-ehcache</artifactId>
+		  <version>1.0.3</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.mybatis</groupId>
+		  <artifactId>mybatis-spring</artifactId>
+		  <version>1.2.0</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.mybatis.caches</groupId>
+		  <artifactId>mybatis-oscache</artifactId>
+		  <version>1.0.1</version>
+	  </dependency>
+
+	  <dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-tx</artifactId>
+		  <version>${spring.version}</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-aop</artifactId>
+		  <version>${spring.version}</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-jdbc</artifactId>
+		  <version>${spring.version}</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-orm</artifactId>
+		  <version>${spring.version}</version>
+	  </dependency>
+	  <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-test</artifactId>
+          <version>${spring.version}</version>
+          <scope>test</scope>
+      </dependency>
+        
+  	<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+	<dependency>
+	    <groupId>com.alibaba</groupId>
+	    <artifactId>fastjson</artifactId>
+	    <version>${fastjson.version}</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+	<dependency>
+	    <groupId>com.google.code.gson</groupId>
+	    <artifactId>gson</artifactId>
+	    <version>${gson.version}</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>io.netty</groupId>
+		<artifactId>netty-all</artifactId>
+		<version>${netty.version}</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>${junit.version}</version>
+		<scope>test</scope>
+	</dependency>
+	
+    <!--log4j2日志配置  begin-->
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>${slf4j-api.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-slf4j-impl</artifactId>
+          <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-api</artifactId>
+          <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-core</artifactId>
+          <version>${log4j.version}</version>
+      </dependency>
+    <!--log4j日志配置 end-->
+
+	<!-- https://mvnrepository.com/artifact/com.google.collections/google-collections -->
+	<dependency>
+	    <groupId>com.google.collections</groupId>
+	    <artifactId>google-collections</artifactId>
+	    <version>${google-collections.version}</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+	<dependency>
+	    <groupId>redis.clients</groupId>
+	    <artifactId>jedis</artifactId>
+	    <version>${jedis.version}</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-lang3</artifactId>
+	    <version>${commons-lang3.version}</version>
+	</dependency>
+		<!-- https://mvnrepository.com/artifact/com.github.rholder/guava-retrying -->
+	<dependency>
+	    <groupId>com.github.rholder</groupId>
+	    <artifactId>guava-retrying</artifactId>
+	    <version>${guava-retrying.version}</version>
+	</dependency>
+	
+	<dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>fluent-hc</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+  </dependencies>
+  
+  <profiles>
+      <profile>
+          <id>cpsino_prod</id>
+          <properties>
+              <profile.env>cpsino_prod</profile.env>
+          </properties>
+      </profile>
+      <profile>
+          <id>cpsino_test</id>
+          <properties>
+              <profile.env>cpsino_test</profile.env>
+          </properties>
+      </profile>
+      <profile>
+          <id>zhongwei_test</id>
+          <properties>
+              <profile.env>zhongwei_test</profile.env>
+              <maven.test.skip>true</maven.test.skip>
+          </properties>
+      </profile>
+      <profile>
+          <id>zhongjing_test</id>
+          <properties>
+              <profile.env>zhongjing_test</profile.env>
+          </properties>
+      </profile>
+      <profile>
+          <id>zhongjing_demo</id>
+          <properties>
+              <profile.env>zhongjing_demo</profile.env>
+              <maven.test.skip>true</maven.test.skip>
+          </properties>
+      </profile>
+      <profile>
+          <id>zhongjing_prod</id>
+          <properties>
+              <profile.env>zhongjing_prod</profile.env>
+              <maven.test.skip>true</maven.test.skip>
+          </properties>
+      </profile>
+      <profile>
+          <id>zhongjing_cat_factory</id>
+          <properties>
+              <profile.env>zhongjing_cat_factory</profile.env>
+              <maven.test.skip>true</maven.test.skip>
+          </properties>
+      </profile>
+      <profile>
+          <id>test</id>
+          <properties>
+              <profile.env>test</profile.env>
+          </properties>
+      </profile>
+      <profile>
+          <id>dev</id>
+          <properties>
+              <profile.env>dev</profile.env>
+          </properties>
+      </profile>
+      <profile>
+          <id>prod</id>
+          <properties>
+              <profile.env>prod</profile.env>
+          </properties>
+      </profile>
+  </profiles>
+  <build>
+    <finalName>cat_conn</finalName>
+    <filters>
+        <filter>src/main/resources/filter/${profile.env}/dbconfig.properties</filter>
+        <filter>src/main/resources/filter/${profile.env}/log4j.properties</filter>
+        <filter>src/main/resources/filter/${profile.env}/redis.properties</filter>
+        <filter>src/main/resources/filter/${profile.env}/systemConfig.properties</filter>
+        <filter>src/main/resources/filter/${profile.env}/log4j2.properties</filter>
+    </filters>
+    <resources>
+        <resource>
+	         <directory>src/main/resources</directory>
+	         <excludes>
+	             <exclude>filter/*.*</exclude>
+	             <exclude>doc/*.*</exclude>
+	         </excludes>
+	         <filtering>true</filtering>
+	     </resource>
+    </resources>
+    <!-- Set JDK Compiler Level (强制使用JDK1.8,防止UPDATE项目后JDK自动变成1.5的问题) -->
+    <plugins>
+	    <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-compiler-plugin</artifactId>
+	        <version>3.1</version>
+	        <configuration>
+	            <source>1.8</source>
+	            <target>1.8</target>
+	        </configuration>
+	    </plugin>
+
+        <plugin>  
+            <groupId>org.apache.maven.plugins</groupId>  
+            <artifactId>maven-jar-plugin</artifactId>  
+            <version>2.4</version>  
+            <configuration>  
+                <archive>  
+                    <manifest>  
+                        <addClasspath>true</addClasspath>  
+                        <classpathPrefix>lib/</classpathPrefix>  
+                        <mainClass>com.cgltech.cat_conn.Main</mainClass>  
+                    </manifest>
+                </archive>
+                <excludes>
+                    <exclude>**/filter/**/*.properties</exclude>
+                </excludes>
+            </configuration>  
+        </plugin>
+        
+        <!-- 拷贝依赖的jar包到lib目录 -->  
+        <plugin>  
+            <groupId>org.apache.maven.plugins</groupId>  
+            <artifactId>maven-dependency-plugin</artifactId>  
+            <executions>  
+                <execution>  
+                    <id>copy</id>  
+                    <phase>package</phase>  
+                    <goals>  
+                        <goal>copy-dependencies</goal>  
+                    </goals>  
+                    <configuration>  
+                        <outputDirectory>  
+                            ${project.build.directory}/lib  
+                        </outputDirectory>  
+                    </configuration>  
+                </execution>  
+            </executions>  
+        </plugin>    
+             <!-- 
+		<plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-shade-plugin</artifactId>
+	        <version>1.2.1</version>
+	        <executions>
+	            <execution>
+	                <phase>package</phase>
+	                <goals>
+	                   <goal>shade</goal>
+	                </goals>
+	                    <configuration>
+	                        <transformers>
+	                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+	                                <mainClass>com.cgltech.cat_conn.Main</mainClass>
+	                            </transformer>
+	                        </transformers>
+	                    </configuration>
+	            </execution>
+	        </executions>
+	     </plugin>
+	      -->   
+     </plugins>
+
+  </build>
+    
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <commons-lang3.version>3.3.2</commons-lang3.version>
+	 <spring.version>4.3.7.RELEASE</spring.version>
+    <fastjson.version>1.2.45</fastjson.version>
+    <gson.version>2.3.1</gson.version>
+    <google-collections.version>1.0</google-collections.version>
+    <jedis.version>2.8.1</jedis.version>
+    <junit.version>4.12</junit.version>
+    <log4j.version>2.8.2</log4j.version>
+    
+    <!--     https://bintray.com/netty/downloads/netty/4.1.20.Final
+    Version Publication Date:Released in Jan 22, 2018 -->
+    <netty.version>4.1.20.Final</netty.version>
+    
+    <slf4j-api.version>1.7.9</slf4j-api.version>
+    <slf4j-log4j12.version>1.7.9</slf4j-log4j12.version>
+    <guava-retrying.version>2.0.0</guava-retrying.version>
+    
+    <profile.env>dev</profile.env>
+  </properties>
+
+</project>

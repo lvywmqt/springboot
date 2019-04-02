@@ -1,0 +1,10 @@
+systemConfig.mysql.driver=com.mysql.jdbc.Driver
+
+systemConfig.mysql.url=jdbc:mysql://rm-m5e248ts331o22gd5.mysql.rds.aliyuncs.com:3306/cat_biz?useUnicode=true&amp;characterEncoding=utf8&amp;characterSetResults=utf8
+systemConfig.mysql.user=root
+systemConfig.mysql.password=zhongjing$$2018
+
+systemConfig.tcp.port=9200
+
+#tcp\u66F4\u65B0\u670D\u52A1\u5668\u7684\u5730\u5740
+systemConfig.updateServer.updateFirmware.folder=/server/f_firmware/

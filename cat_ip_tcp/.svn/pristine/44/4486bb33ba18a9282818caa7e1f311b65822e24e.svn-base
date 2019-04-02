@@ -1,0 +1,14 @@
+systemConfig.mysql.driver=${systemConfig.mysql.driver}
+
+systemConfig.mysql.url=${systemConfig.mysql.url}
+systemConfig.mysql.user=${systemConfig.mysql.user}
+systemConfig.mysql.password=${systemConfig.mysql.password}
+
+systemConfig.tcp.port=${systemConfig.tcp.port}
+
+#tcp\u66F4\u65B0\u670D\u52A1\u5668\u7684\u5730\u5740
+systemConfig.updateServer.updateFirmware.folder=${systemConfig.updateServer.updateFirmware.folder}
+
+
+
+
